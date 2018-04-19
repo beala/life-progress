@@ -4,6 +4,11 @@ from typing import List
 
 import sys
 import math
+import click
+
+from dateutil.parser import parse as parse_date_string
+from dateutil import relativedelta
+from datetime import datetime
 
 
 # p_survive_to(0, 1) calculates the probability that you'll survive to your 1st birthday assuming you've just
@@ -53,26 +58,31 @@ def render(p_die_in_one_year: List[float], render_to_year: int, age_months: int,
         # Draw probability, coffee, and books annotation if the *next* year is a decade.
         next_year = year + 1
         if is_decade(next_year) and next_year > age_years:
-            books_read = years_to_months(year, months=11) - age_months * books_per_month
-            coffees_drank = (years_to_months(year, months=11) - age_months) * coffee_per_month
-            sys.stdout.write(
-                '   {:.3f}, Books: {}, Cups of Coffee: {}'
-                .format(
-                    p_survive_to(p_die_in_one_year, age_years, year + 1),
-                    books_read,
-                    coffees_drank
-                )
+            annotation_string = '   {:.3f}'.format(
+                p_survive_to(p_die_in_one_year, age_years, year + 1)
             )
+            if books_per_month > 0:
+                books_read = (years_to_months(year, months=11) - age_months) * books_per_month
+                annotation_string += ', Books: {}'.format(books_read)
+            if coffee_per_month > 0:
+                coffees_drank = (years_to_months(year, months=11) - age_months) * coffee_per_month
+                annotation_string += ', Cups of Coffee: {}'.format(coffees_drank)
+            sys.stdout.write(annotation_string)
 
     print('\n')
     sys.stdout.flush()
 
 
-def main():
-    age_months = (29 * 12) + 5
-    male = False
-    coffee_per_month = 30
-    books_per_month = 1
+@click.command()
+@click.argument('birthday')  # Common formats, e.g. year-month-day
+@click.option('--books', 'books_per_month', type=int, default=0, help='Books per month')
+@click.option('--coffee', 'coffee_per_month', type=int, default=0, help='Cups of coffee per month')
+@click.option('--male', is_flag=True, help='Defaults to female')
+def main(birthday: str, books_per_month: int=0, coffee_per_month: int=0, male: bool=False):
+    birthday = parse_date_string(birthday)
+    age_delta = relativedelta.relativedelta(datetime.now(), birthday)
+    age_months = (age_delta.years * 12) + age_delta.months
+
     render_to_year = 90
 
     # Each entry in p_die_in_one_year is the probability of dying at a certain age,
