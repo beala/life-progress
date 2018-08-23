@@ -8,6 +8,7 @@ It was used in this blog post: http://www.usrsb.in/memento-mori.html.
 Python >= 3.5 with the following additional packages is required:
 
 * [click](http://click.pocoo.org)
+* [dateutil](https://dateutil.readthedocs.io/en/stable/)
 
 ## Usage
 
