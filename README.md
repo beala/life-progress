@@ -22,6 +22,8 @@ Options:
   --help            Show this message and exit.
 ```
 
+Example: ` python3 life-progress.py --books 1 --coffee 60 --male "October 3, 1988"`
+
 # Credits
 
 The concept is from [Scott Hendrickson](https://blog.drskippy.net/2012/11/11/age-visualization/),
