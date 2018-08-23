@@ -1,10 +1,31 @@
-This is a script for generating life expectancy progress bars. I used it in this blog post: http://www.usrsb.in/memento-mori.html.
+# Life Progress
 
-To generate your own, edit the variables at the top of `life-progress.py` and run it.
+This is a script for generating life expectancy progress bars. 
+It was used in this blog post: http://www.usrsb.in/memento-mori.html.
+
+## Requirements
+
+Python >= 3.5 with the following additional packages is required:
+
+* [click](http://click.pocoo.org)
+
+## Usage
 
 ```
-python life-progress.py
+Usage: life-progress.py [OPTIONS] BIRTHDAY
+
+Options:
+  --books INTEGER   Books per month
+  --coffee INTEGER  Cups of coffee per month
+  --male            Defaults to female
+  --help            Show this message and exit.
 ```
 
-# Credit
-I got the concept from [Scott Hendrickson](https://blog.drskippy.net/2012/11/11/age-visualization/), who in turn was inspired by Sha Hwang
+# Credits
+
+The concept is from [Scott Hendrickson](https://blog.drskippy.net/2012/11/11/age-visualization/),
+who in turn was inspired by Sha Hwang.
+
+## License
+
+Licensed unter the terms of the MIT license. Please refer to [LICENSE](LICENSE).
