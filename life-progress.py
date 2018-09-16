@@ -65,10 +65,10 @@ def render(p_die_in_one_year: List[float],
                 p_survive_to(p_die_in_one_year, age_years, year + 1)
             )
             if books_per_month > 0:
-                books_read = (years_to_months(year, months=11) - age_months) * books_per_month
+                books_read = (years_to_months(year, months=12) - age_months) * books_per_month
                 annotation_string += ', Books: {}'.format(books_read)
             if coffee_per_month > 0:
-                coffees_drank = (years_to_months(year, months=11) - age_months) * coffee_per_month
+                coffees_drank = (years_to_months(year, months=12) - age_months) * coffee_per_month
                 annotation_string += ', Cups of Coffee: {}'.format(coffees_drank)
             sys.stdout.write(annotation_string)
 
