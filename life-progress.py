@@ -30,8 +30,11 @@ def years_to_months(years: int, months: int=0) -> int:
     return years * 12 + months
 
 
-def render(p_die_in_one_year: List[float], render_to_year: int, age_months: int,
-           books_per_month: int, coffee_per_month: int):
+def render(p_die_in_one_year: List[float],
+           render_to_year: int,
+           age_months: int,
+           books_per_month: int,
+           coffee_per_month: int):
     age_years = int(math.floor(age_months / 12))
 
     for year in range(0, render_to_year):
@@ -44,7 +47,7 @@ def render(p_die_in_one_year: List[float], render_to_year: int, age_months: int,
 
         # Draw boxes
         for month in range(0, 12):
-            if 12 * year + month <= age_months:
+            if 12 * year + month < age_months:
                 sys.stdout.write('■ ')
             else:
                 sys.stdout.write('□ ')
@@ -85,11 +88,9 @@ def main(birthday: str, books_per_month: int=0, coffee_per_month: int=0, male: b
 
     render_to_year = 90
 
-    # Each entry in p_die_in_one_year is the probability of dying at a certain age,
-    # given that you've just turned that age.
-    # So, p_die_in_one_year[0] is the probability you'll survive your first year of life, given that you've just been
-    # born
-    # Data comes from this table: https://www.ssa.gov/oact/STATS/table4c6.html
+    # Each entry in p_die_in_one_year is the probability of surviving a certain age, given that you've just turned
+    # that age. So, p_die_in_one_year[0] is the probability you'll survive your first year of life, given that you've
+    # just been born. Data comes from this table: https://www.ssa.gov/oact/STATS/table4c6.html
     p_die_in_one_year = []
     death_prob_per_year_file = './death-prob-men.tsv' if male else './death-prob-women.tsv'
     with open(death_prob_per_year_file, 'r') as death_probability_raw:

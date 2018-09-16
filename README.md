@@ -31,4 +31,4 @@ who in turn was inspired by Sha Hwang.
 
 ## License
 
-Licensed unter the terms of the MIT license. Please refer to [LICENSE](LICENSE).
+Licensed under the terms of the [MIT License](LICENSE).
