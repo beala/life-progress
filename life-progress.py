@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import math
+import sys
+from datetime import datetime
 from typing import List
 
-import sys
-import math
 import click
-
-from dateutil.parser import parse as parse_date_string
 from dateutil import relativedelta
-from datetime import datetime
+from dateutil.parser import parse as parse_date_string
 
 
 # p_survive_to(0, 1) calculates the probability that you'll survive to your 1st birthday assuming you've just
@@ -26,7 +25,7 @@ def is_decade(year: int) -> bool:
     return year % 10 == 0
 
 
-def years_to_months(years: int, months: int=0) -> int:
+def years_to_months(years: int, months: int = 0) -> int:
     return years * 12 + months
 
 
@@ -81,7 +80,7 @@ def render(p_die_in_one_year: List[float],
 @click.option('--books', 'books_per_month', type=int, default=0, help='Books per month')
 @click.option('--coffee', 'coffee_per_month', type=int, default=0, help='Cups of coffee per month')
 @click.option('--male', is_flag=True, help='Defaults to female')
-def main(birthday: str, books_per_month: int=0, coffee_per_month: int=0, male: bool=False):
+def main(birthday: str, books_per_month: int = 0, coffee_per_month: int = 0, male: bool = False):
     birthday = parse_date_string(birthday)
     age_delta = relativedelta.relativedelta(datetime.now(), birthday)
     age_months = (age_delta.years * 12) + age_delta.months
