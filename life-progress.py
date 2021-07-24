@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import argparse
 import math
 import sys
 from datetime import datetime
 from typing import List
-
-import click
-from dateutil import relativedelta
-from dateutil.parser import parse as parse_date_string
 
 
 # p_survive_to(0, 1) calculates the probability that you'll survive to your 1st birthday assuming you've just
@@ -75,28 +72,30 @@ def render(p_die_in_one_year: List[float],
     sys.stdout.flush()
 
 
-@click.command()
-@click.argument('birthday')  # Common formats, e.g. year-month-day
-@click.option('--books', 'books_per_month', type=int, default=0, help='Books per month')
-@click.option('--coffee', 'coffee_per_month', type=int, default=0, help='Cups of coffee per month')
-@click.option('--male', is_flag=True, help='Defaults to female')
-def main(birthday: str, books_per_month: int = 0, coffee_per_month: int = 0, male: bool = False):
-    birthday = parse_date_string(birthday)
-    age_delta = relativedelta.relativedelta(datetime.now(), birthday)
-    age_months = (age_delta.years * 12) + age_delta.months
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('birthday', help="YYYY-MM-DD")
+    parser.add_argument('--books', type=int, default=0, help='Books per month')
+    parser.add_argument('--coffee', type=int, default=0, help='Cups of coffee per month')
+    parser.add_argument('--female', action='store_true', help='Calculate with actuarial tables for females')
+    args = parser.parse_args()
 
-    render_to_year = 90
+    parsed_birthday = datetime.fromisoformat(args.birthday)
+    now = datetime.now()
+    age_months = ((now.year - parsed_birthday.year) * 12) + (now.month - parsed_birthday.month)
+
+    render_to_year = 100
 
     # Each entry in p_die_in_one_year is the probability of surviving a certain age, given that you've just turned
     # that age. So, p_die_in_one_year[0] is the probability you'll survive your first year of life, given that you've
     # just been born. Data comes from this table: https://www.ssa.gov/oact/STATS/table4c6.html
     p_die_in_one_year = []
-    death_prob_per_year_file = './death-prob-men.tsv' if male else './death-prob-women.tsv'
+    death_prob_per_year_file = './death-prob-men.tsv' if not args.female else './death-prob-women.tsv'
     with open(death_prob_per_year_file, 'r') as death_probability_raw:
         for death_prob_per_year in death_probability_raw:
             p_die_in_one_year.append(float(death_prob_per_year))
 
-    render(p_die_in_one_year, render_to_year, age_months, books_per_month, coffee_per_month)
+    render(p_die_in_one_year, render_to_year, age_months, args.books, args.coffee)
 
 
 if __name__ == '__main__':
